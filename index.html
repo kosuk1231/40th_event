@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>40주년 사진 제출 | 서울특별시사회복지사협회</title>
+  <meta name="description" content="서울특별시사회복지사협회 창립 40주년 기념 사진 제출" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #1a2e2a;
+      --bg-light: #223b36;
+      --bg-card: #1e3430;
+      --accent: #7dd3b5;
+      --accent-dark: #5bb895;
+      --accent-glow: rgba(125, 211, 181, 0.15);
+      --text: #e8f0ed;
+      --text-muted: #8faa9f;
+      --border: #2d4f47;
+      --border-light: #3a6359;
+      --error: #f87171;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      background: linear-gradient(170deg, var(--bg) 0%, #152623 50%, #0f1e1b 100%);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      opacity: 0.03;
+      background-image:
+        radial-gradient(circle at 25% 25%, var(--accent) 1px, transparent 1px),
+        radial-gradient(circle at 75% 75%, var(--accent) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .header {
+      text-align: center;
+      padding: 48px 24px 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 8px 28px;
+      border: 1px solid var(--border-light);
+      border-radius: 999px;
+      font-size: 13px;
+      letter-spacing: 3px;
+      color: var(--text-muted);
+      margin-bottom: 28px;
+    }
+
+    .big-number {
+      font-size: 120px;
+      font-weight: 800;
+      line-height: 1;
+      color: transparent;
+      background: linear-gradient(180deg, rgba(125,211,181,0.25) 0%, rgba(125,211,181,0.05) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      margin-bottom: -20px;
+      letter-spacing: -4px;
+      user-select: none;
+    }
+
+    .title {
+      font-size: 28px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 32px 28px;
+      width: 100%;
+      max-width: 440px;
+      margin: 32px 24px 48px;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .field { margin-bottom: 20px; }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .field label .req { color: var(--accent); }
+    .field label .hint { color: var(--text-muted); font-weight: 400; margin-left: 8px; }
+
+    .field input[type="text"] {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--bg-light);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 15px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .field input[type="text"]:focus { border-color: var(--accent); }
+    .field input[type="text"]::placeholder { color: var(--border-light); }
+
+    .dropzone {
+      border: 2px dashed var(--border-light);
+      border-radius: 12px;
+      padding: 32px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .dropzone:hover,
+    .dropzone.drag-over {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    .dropzone .icon { font-size: 32px; margin-bottom: 8px; opacity: 0.8; }
+    .dropzone p { font-size: 14px; color: var(--text-muted); margin: 0; }
+    .dropzone .hint { font-size: 12px; color: var(--border-light); margin-top: 6px; }
+
+    #fileInput { display: none; }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .preview-item {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .preview-item .remove-btn {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .preview-count {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+
+    .error-msg {
+      color: var(--error);
+      font-size: 13px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+      color: var(--bg);
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      letter-spacing: 0.5px;
+    }
+
+    .submit-btn:hover:not(:disabled) { transform: translateY(-1px); }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .footer-note {
+      font-size: 12px;
+      color: var(--border-light);
+      text-align: center;
+      margin-top: 16px;
+      line-height: 1.6;
+    }
+
+    .progress-bar-bg {
+      width: 100%;
+      height: 6px;
+      background: var(--border);
+      border-radius: 3px;
+      overflow: hidden;
+      margin-top: 20px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-dark));
+      border-radius: 3px;
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+
+    .status-icon { font-size: 56px; margin-bottom: 16px; }
+    .status-title { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+    .status-msg { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 24px; }
+
+    .hidden { display: none !important; }
+
+    @media (max-width: 480px) {
+      .big-number { font-size: 80px; }
+      .title { font-size: 24px; }
+      .card { padding: 24px 20px; margin: 24px 16px 40px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── FORM VIEW ─── -->
+  <div id="view-form">
+    <div class="header">
+      <div class="badge">서울특별시사회복지사협회 창립 40주년</div>
+      <div class="big-number">40th</div>
+      <h1 class="title">사진 제출</h1>
+      <p class="subtitle">40년의 순간 포착</p>
+      <p class="desc">
+        협회와 함께한 소중한 순간을 사진으로 공유해 주세요.<br />
+        제출하신 사진은 40주년 기념행사에서 활용됩니다.
+      </p>
+    </div>
+
+    <div class="card">
+      <div class="field">
+        <label>성함 <span class="req">*</span></label>
+        <input type="text" id="inputName" placeholder="성함을 입력하세요" />
+      </div>
+      <div class="field">
+        <label>소속</label>
+        <input type="text" id="inputAffil" placeholder="소속 기관명을 입력하세요" />
+      </div>
+      <div class="field">
+        <label>연락처</label>
+        <input type="text" id="inputContact" placeholder="010-0000-0000" />
+      </div>
+      <div class="field">
+        <label>사진 첨부 <span class="req">*</span><span class="hint">(최대 10장, 장당 10MB)</span></label>
+        <div class="dropzone" id="dropzone">
+          <div class="icon">📷</div>
+          <p>클릭하거나 사진을 여기에 끌어다 놓으세요</p>
+          <p class="hint">JPG, PNG, HEIC 지원</p>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" multiple />
+      </div>
+
+      <div id="previewSection" class="hidden">
+        <p class="preview-count" id="previewCount"></p>
+        <div class="preview-grid" id="previewGrid"></div>
+      </div>
+
+      <p class="error-msg hidden" id="errorMsg"></p>
+
+      <button class="submit-btn" id="submitBtn" disabled>사진 제출하기</button>
+      <p class="footer-note">제출하신 사진은 40주년 기념행사 목적으로만 사용됩니다.</p>
+    </div>
+  </div>
+
+  <!-- ─── UPLOADING VIEW ─── -->
+  <div id="view-uploading" class="hidden">
+    <div class="header">
+      <div class="badge">서울특별시사회복지사협회 창립 40주년</div>
+      <div class="big-number">40th</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="status-icon">📤</div>
+      <p class="status-title">사진 업로드 중...</p>
+      <p class="status-msg">잠시만 기다려 주세요.</p>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progressBar"></div>
+      </div>
+      <p style="font-size:13px;color:var(--text-muted);margin-top:12px;" id="progressText">0%</p>
+    </div>
+  </div>
+
+  <!-- ─── SUCCESS VIEW ─── -->
+  <div id="view-success" class="hidden">
+    <div class="header">
+      <div class="badge">서울특별시사회복지사협회 창립 40주년</div>
+      <div class="big-number">40th</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="status-icon">✅</div>
+      <p class="status-title" style="color:var(--accent);">제출 완료!</p>
+      <p class="status-msg" id="successMsg">사진이 성공적으로 제출되었습니다.<br />소중한 사진을 공유해 주셔서 감사합니다.</p>
+      <button class="submit-btn" id="resetBtn">추가 제출하기</button>
+    </div>
+  </div>
+
+  <!-- ─── ERROR VIEW ─── -->
+  <div id="view-error" class="hidden">
+    <div class="header">
+      <div class="badge">서울특별시사회복지사협회 창립 40주년</div>
+      <div class="big-number">40th</div>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div class="status-icon">⚠️</div>
+      <p class="status-title" style="color:var(--error);">오류 발생</p>
+      <p class="status-msg" id="errorViewMsg"></p>
+      <button class="submit-btn" id="retryBtn">다시 시도하기</button>
+    </div>
+  </div>
+
+  <script>
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbywiA6DNlum3_kDLJ541fnMvWkjEUwyQclCXScdZdUJh9Ju4nSq8A2hqaHiDOs0c_Wo/exec';
+    const MAX_FILES = 10;
+    const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+    // DOM refs
+    const views = {
+      form: document.getElementById('view-form'),
+      uploading: document.getElementById('view-uploading'),
+      success: document.getElementById('view-success'),
+      error: document.getElementById('view-error'),
+    };
+    const inputName = document.getElementById('inputName');
+    const inputAffil = document.getElementById('inputAffil');
+    const inputContact = document.getElementById('inputContact');
+    const dropzone = document.getElementById('dropzone');
+    const fileInput = document.getElementById('fileInput');
+    const previewSection = document.getElementById('previewSection');
+    const previewCount = document.getElementById('previewCount');
+    const previewGrid = document.getElementById('previewGrid');
+    const errorMsg = document.getElementById('errorMsg');
+    const submitBtn = document.getElementById('submitBtn');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const successMsgEl = document.getElementById('successMsg');
+    const errorViewMsg = document.getElementById('errorViewMsg');
+
+    let selectedFiles = [];
+
+    // ─── View switching ───
+    function showView(name) {
+      Object.values(views).forEach(v => v.classList.add('hidden'));
+      views[name].classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ─── Validation ───
+    function updateSubmitState() {
+      const valid = inputName.value.trim() && selectedFiles.length > 0;
+      submitBtn.disabled = !valid;
+    }
+
+    inputName.addEventListener('input', () => { errorMsg.classList.add('hidden'); updateSubmitState(); });
+
+    // ─── File handling ───
+    function addFiles(fileList) {
+      const newFiles = Array.from(fileList).filter(f => {
+        if (!f.type.startsWith('image/')) return false;
+        if (f.size > MAX_FILE_SIZE) return false;
+        return true;
+      });
+      selectedFiles = [...selectedFiles, ...newFiles].slice(0, MAX_FILES);
+      renderPreviews();
+      updateSubmitState();
+    }
+
+    function removeFile(idx) {
+      selectedFiles.splice(idx, 1);
+      renderPreviews();
+      updateSubmitState();
+    }
+
+    function renderPreviews() {
+      if (selectedFiles.length === 0) {
+        previewSection.classList.add('hidden');
+        return;
+      }
+      previewSection.classList.remove('hidden');
+      previewCount.textContent = `첨부된 사진 (${selectedFiles.length}장)`;
+      previewGrid.innerHTML = '';
+
+      selectedFiles.forEach((file, idx) => {
+        const item = document.createElement('div');
+        item.className = 'preview-item';
+
+        const img = document.createElement('img');
+        const url = URL.createObjectURL(file);
+        img.src = url;
+        img.alt = file.name;
+        img.onload = () => URL.revokeObjectURL(url);
+
+        const btn = document.createElement('button');
+        btn.className = 'remove-btn';
+        btn.textContent = '✕';
+        btn.onclick = (e) => { e.stopPropagation(); removeFile(idx); };
+
+        item.appendChild(img);
+        item.appendChild(btn);
+        previewGrid.appendChild(item);
+      });
+    }
+
+    // Dropzone events
+    dropzone.addEventListener('click', () => fileInput.click());
+    dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('drag-over'); });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag-over'));
+    dropzone.addEventListener('drop', (e) => { e.preventDefault(); dropzone.classList.remove('drag-over'); addFiles(e.dataTransfer.files); });
+    fileInput.addEventListener('change', (e) => { addFiles(e.target.files); fileInput.value = ''; });
+
+    // ─── File → Base64 ───
+    function fileToBase64(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve({
+          data: reader.result.split(',')[1],
+          mimeType: file.type,
+          fileName: file.name,
+        });
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // ─── Progress ───
+    function setProgress(pct) {
+      progressBar.style.width = pct + '%';
+      progressText.textContent = pct + '%';
+    }
+
+    // ─── Submit ───
+    submitBtn.addEventListener('click', async () => {
+      if (!inputName.value.trim()) {
+        errorMsg.textContent = '성함을 입력해 주세요.';
+        errorMsg.classList.remove('hidden');
+        return;
+      }
+      if (selectedFiles.length === 0) {
+        errorMsg.textContent = '사진을 1장 이상 첨부해 주세요.';
+        errorMsg.classList.remove('hidden');
+        return;
+      }
+
+      showView('uploading');
+      setProgress(10);
+
+      try {
+        const fileDataArr = [];
+        for (let i = 0; i < selectedFiles.length; i++) {
+          const fd = await fileToBase64(selectedFiles[i]);
+          fileDataArr.push(fd);
+          setProgress(10 + Math.round(70 * (i + 1) / selectedFiles.length));
+        }
+
+        setProgress(85);
+
+        const payload = {
+          name: inputName.value.trim(),
+          affiliation: inputAffil.value.trim(),
+          contact: inputContact.value.trim(),
+          files: fileDataArr,
+        };
+
+        const response = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify(payload),
+        });
+
+        setProgress(95);
+        const result = await response.json();
+
+        if (result.success) {
+          setProgress(100);
+          successMsgEl.innerHTML = (result.message || '사진이 성공적으로 제출되었습니다.') + '<br />소중한 사진을 공유해 주셔서 감사합니다.';
+          showView('success');
+        } else {
+          errorViewMsg.textContent = result.message || '제출 중 오류가 발생했습니다.';
+          showView('error');
+        }
+      } catch (err) {
+        errorViewMsg.textContent = '네트워크 오류가 발생했습니다. 다시 시도해 주세요.';
+        showView('error');
+      }
+    });
+
+    // ─── Reset / Retry ───
+    function resetForm() {
+      inputName.value = '';
+      inputAffil.value = '';
+      inputContact.value = '';
+      selectedFiles = [];
+      renderPreviews();
+      errorMsg.classList.add('hidden');
+      updateSubmitState();
+      setProgress(0);
+      showView('form');
+    }
+
+    document.getElementById('resetBtn').addEventListener('click', resetForm);
+    document.getElementById('retryBtn').addEventListener('click', () => showView('form'));
+  </script>
+</body>
+</html>
